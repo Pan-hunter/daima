@@ -1,0 +1,246 @@
+#include <stdio.h>
+#include<stdlib.h>
+typedef struct _student//定义结构体类型并为其分配空间
+{
+    int num;
+    char name[20];
+    char sex[20];
+    char date[20];
+    int g;
+    int c;
+}student;//结构体类型为student
+typedef struct _Node//定义新的结构体类型为指针
+{student stu;
+struct _Node* pNext;
+}Node;
+
+Node *g_pHead=NULL;//头指针
+Node* FindStudent();
+
+void welcome()
+{
+    printf("|\t   学生成绩管理系统  \t|\n");
+    printf("|\t   1.学生信息录入。  \t|\n");
+    printf("|\t   2.学生信息浏览    \t|\n");
+    printf("|\t   3.学生信息保存   \t|\n");
+    printf("|\t   4.学生人数统计   \t|\n");
+    printf("|\t   5.学生信息查找   \t|\n");
+    printf("|\t   6.修改学生信息   \t|\n");
+    printf("|\t   7.删除学生信息   \t|\n");
+    printf("|\t   8.排序学生信息   \t|\n");
+    printf("|\t   0.结束程序运行   \t|\n");
+    printf("请选择（1 2 3 4 5 6 7 0）：");
+    return;
+}
+
+int main()
+{
+    int select;
+    while(1){
+        welcome();
+    scanf("%d",&select);//输入1-0并赋值给select
+    if(select==0) break;
+    switch(select)
+    {
+        case 1:InputStudent();break;
+        case 2:Printfstudent();break;
+        case 3:SaveStudent();break;
+        case 4:printf("学生总人数为：%d\n",CountStudent());
+        system("pause");//
+        system("cls");//清除屏幕上显示
+        break;
+        case 5:
+            {Node* p= FindStudent();//指针处理链表
+        if(p!=NULL)//若果申请失败返回空指针
+        printf("学号：%d\t姓名：%s\t性别：%s\t出生日期：%s\t c语言成绩：%d\t 计导成绩：%d\n"//\t水平制表符代替8个空格
+                   ,p->stu.num,p->stu.name,p->stu.sex,p->stu.date,p->stu.c,p->stu.g);//用链表p储存的数据对所指变量进行输出
+        else
+            printf("没有找到该学生。\n");
+
+        system("pause");
+        system("cls");
+        break;
+             }
+        case 6:ModifyStudent();break;//修改学生信息
+        case 7:DeleteStudent(); break;//删除学生信息
+    }
+            }
+
+printf("程序运行结束，再见！");
+return 0;
+}
+
+void Printfstudent()//打印学生信息
+{   float aver;//计算平均数
+    system("cls");
+    printf("______________________________________________________________________\n");
+    printf("|学号\t|姓名\t|性别\t|出生日期\t\t|c成绩\t\t|计导成绩\t|平均成绩\t\n");
+    printf("______________________________________________________________________\n");
+
+        Node* p=g_pHead;//新的节点作为表头
+        while(p!=NULL)
+        {  aver =(p->stu.c+p->stu.g)/2;//计算学生及算机和c语言成绩
+            printf("|%d\t|%s\t|%s\t|%s\t\t|%d\t\t|%d\t\t|%f\t\t\n",p->stu.num,p->stu.name,p->stu.sex,p->stu.date,p->stu.c,p->stu.g,aver);//输出结构体的数据类型
+            printf("______________________________________________________________________\n");
+            p=p->pNext;//让p指向下一个节点的首地址
+        }
+        system("pause");
+        system("cls");
+        return 0;
+}
+void InputStudent()//函数类型
+{  Node* pNewNode=(Node*)malloc(sizeof(Node));//调用函数申请空间分配一个空间给node
+   pNewNode->pNext=NULL;//引用类型
+   if(g_pHead==NULL)//若申请空间成功
+  {
+      g_pHead=pNewNode;
+  }
+   else
+  {
+      pNewNode->pNext=g_pHead;//否则用一个新的节点作为头指针
+      g_pHead=pNewNode;
+  }
+    printf("请输入学生相关信息\n");
+    printf("学号：");
+    scanf("%d",&pNewNode->stu.num);//取新的节点放到数字结构体里
+
+    printf("姓名：");
+    scanf("%s",pNewNode->stu.name);
+
+    printf("性别:");
+    scanf("%s",pNewNode->stu.sex);
+
+    printf("出生日期：");
+    scanf("%s",pNewNode->stu.date);
+
+    printf("c成绩：");
+    scanf("%d",&pNewNode->stu.c);
+
+    printf("计导成绩：");
+    scanf("%d",&pNewNode->stu.g);
+
+    printf("学生信息录入成功\n");
+    system("pause");
+    system("cls");
+    return;
+}
+
+void SaveStudent()//存储学生信息
+{
+    FILE * fp =fopen("c:\\stuinfo.dat","w");//声明fp是指针打开指向储存在结构体中的数据
+    if(fp==NULL)//如果fp是空
+    {
+        printf("打开文件失败！\n");
+        return;
+    }
+    Node* p=g_pHead;
+        while(p!=NULL)//若内存申请成功
+        {
+            fwrite(&p->stu,sizeof(student),1,fp);//打开已经存储的文件结构体数据
+            p=p->pNext;
+        }
+        fclose(fp);
+        printf("\n数据保存成功\n");
+        system("pause");
+        system("cls");
+        return;
+}
+
+Node* FindStudent()//指针查找信息
+{   int num1;
+    char name1[20];
+    printf("请输入要查找的学生的学号：\n");
+    scanf("%d",&num1);
+    printf("请输入要查找的学生的姓名：\n");
+    scanf("%s",&name1);
+    Node* p=g_pHead;
+        while(p!=NULL)
+        {
+            if(p->stu.num==num1||0==strcmp(p->stu.name,name1))//如果满足其中一个条件找学号和找名字
+            {
+                return p;
+            }
+            p=p->pNext;
+        }
+    return NULL;
+}
+
+void ModifyStudent()//修改成绩
+{
+    int num1;
+    printf("请输入需要修改的学生信息的学号：\n");
+    scanf("%d",&num1);
+    Node* p=g_pHead;
+        while(p!=NULL)
+        {
+            if(p->stu.num==num1)//若输入学生的学号在前面有记录则执行下一步
+            {
+                printf("请输入要修改的学生姓名 性别 出生日期 c语言成绩 计导成绩：\n");
+                scanf("%s %s %s %d %d",p->stu.name,p->stu.sex,&p->stu.date,&p->stu.c,&p->stu.g);//输入各项的数据
+                printf("修改成功。\n");
+                break;
+            }
+            p=p->pNext;
+        }
+        if(p==NULL)//若没有找到
+        {
+            printf("没有找到该学生信息：\n");
+        }
+        system("pause");
+        system("cls");
+        return;
+}
+
+void DeleteStudent()//删除学生信息
+{
+    int num1;
+    printf("请输入要删除的学生学号：\n");
+    scanf("%d",&num1);
+    Node* p1,*p2;
+    if(g_pHead->stu.num==num1)//同上
+    {
+        p1=g_pHead;//p1指针类型
+        g_pHead=g_pHead->pNext;
+        free(p1);//指针变量名释放内存空间，释放了才可以用
+        system("pause");
+        system("cls");
+        return;
+    }
+    Node* p=g_pHead;
+    while(p->pNext!=NULL)
+    {
+        if(p->pNext->stu.num==num1)
+        {
+            p2=p->pNext;//p2指针类型
+            p->pNext=p->pNext->pNext;
+            free(p2);
+            system("pause");
+            system("cls");
+            return;
+        }
+        p=p->pNext;
+        if(p->pNext==NULL)
+        {
+            break;
+        }
+    }
+    if(p->pNext==NULL)
+    {
+        printf("没有找到该学生\n");
+    }
+
+        system("pause");
+        system("cls");
+        return;
+}
+int CountStudent()//计算学生成绩
+{
+    int nCount=0;
+    Node* p=g_pHead;
+        while(p!=NULL)//同上
+        {
+            nCount++;
+            p=p->pNext;
+        }
+        return ;
+}
