@@ -1,0 +1,34 @@
+/*
+2021 1 14 22.17
+求1到100之间能被3整除的数字之和
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int i;
+    int sum1=0;
+    int sum2=0;
+    float avg=0;
+    int cnt=0;//个数一般用cnt表示
+
+    for (i=1; i<=100; ++i)
+    {
+       if (i%2 == 1)
+      {
+        sum1=sum1+i;
+        ++cnt;
+      }
+       else if(i%2 != 1)
+        sum2=sum2+i;
+        avg=1.0*sum2/cnt;//把sum2的类型进行转换所以乘个1.0
+        sum1=sum1+i;
+
+    }
+     printf("偶数=%d\n",sum1);
+     printf("奇数=%d\n",sum2);
+     printf("奇数的平均值=%f\n",avg);//浮点型不能用%d
+     printf("奇数的个数=%d\n",cnt);
+}
+
