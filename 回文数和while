@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{   int val;
+    int m;
+    int sum=0;
+
+    printf("请输入您需要判断的数字:");
+    scanf("%d",&val);
+
+    m=val;
+    while (m)
+    {
+        sum=sum*10+m%10;
+        m/=10;
+    }
+    if(sum==val)
+        printf("yes\n");
+        else
+        printf("no\n");
+
+    return 0;
+}
+/*
+ 1.m=1234
+ sum=0*10+1234%10=4
+ m=1234/10=123
+ 2.m=123
+ sum=4*10+123%10=43
+ m=123/10=12
+ 4.m=12
+ sum=43*10+12%10=431
+ m=12/10=1
+ 5.m=1
+ sum=431*10+1%10=4321
+ m=1/10=0
+ 6.m=0
+所以4321不是回文数主要看的是分析流程和试 数
+
+/*
