@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{   if (1>2)//如果这里加了;则认为有一个空语句是错误的
+      printf("Hello world!\n");
+    else if(3>4)
+        printf("hh\n");
+    return 0;
+}if
+//------
+//if (表达式1)
+  //  A;
+//else if(表达式2)
+  //  B;
+//else (表达式4)
+  //   C;
+//即使1 2 都成立也只会执行A语句
+//表达式4是错误的:
+    //要么加if(有if才加括号 )
+    //要么删去表达式4
