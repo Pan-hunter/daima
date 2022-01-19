@@ -1,0 +1,28 @@
+ #include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{   int val;
+    printf("请输入楼层:");
+    scanf("%d",&val);
+
+    switch(val)
+    {
+        case 1:
+        printf("1楼\n");
+         break;
+        case 2:
+        printf("2楼\n");
+         break;
+        case 3:
+        printf("3楼\n");
+         break;
+        case 4:
+        printf("4楼到了\n");
+         break;
+        default:
+        printf("没到这里\n");
+        break;
+    }
+    return 0;
+}
